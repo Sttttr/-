@@ -1,0 +1,32 @@
+<launch>
+  <!-- 【关键】强制开启仿真时间模式 -->
+  <param name="/use_sim_time" value="true" />
+
+  <!-- 1. 启动仿真器 -->
+  <node pkg="stage_ros" type="stageros" name="stageros" args="$(find fds_planner)/world/simple.world" output="screen" />
+
+  <!-- 2. 加载地图 -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find fds_planner)/maps/simple.yaml" />
+
+  <!-- 3. 【重点修正】因为现在用 AMCL 可能还没配好，我们手动发两个坐标变换 -->
+  <!-- 打通 map -> odom -->
+  <node pkg="tf" type="static_transform_publisher" name="map_odom" args="0 0 0 0 0 0 map odom 100" />
+  <!-- 为了防止 Stage 没发坐标，我们可以临时保底，但最好的方法是让 Stage 自己发 -->
+
+  <!-- 4. 驱动 move_base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <param name="base_global_planner" value="fds_planner/FDSPlanner"/>
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>
+    
+    <rosparam file="$(find fds_planner)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find fds_planner)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find fds_planner)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find fds_planner)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find fds_planner)/config/base_local_planner_params.yaml" command="load" />
+  </node>
+
+  <!-- 5. RViz -->
+  <!-- <node name="rviz" pkg="rviz" type="rviz" /> -->
+  <!-- 自动加载配好的 RViz 配置 -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find fds_planner)/rviz/default2.rviz" />
+</launch>

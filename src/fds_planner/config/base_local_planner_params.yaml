@@ -1,0 +1,30 @@
+# DWAPlannerROS:
+#   max_vel_x: 0.5
+#   min_vel_x: 0.0
+#   max_rot_vel: 1.0
+#   min_rot_vel: 0.4
+#   acc_lim_x: 2.5
+#   acc_lim_y: 0.0
+#   acc_lim_theta: 3.2
+#   xy_goal_tolerance: 0.1
+#   yaw_goal_tolerance: 0.1
+DWAPlannerROS:
+  # 1. 速度限制：在虚拟机里走慢点更稳
+  max_vel_x: 0.3      # 最高速设为 0.3
+  min_vel_x: 0.0
+  max_vel_theta: 1.0    # 转向稍微快点，方便纠偏
+  min_vel_theta: 0.4
+
+  # 2. 核心容错率：不要太追求精准，先跑起来
+  xy_goal_tolerance: 0.2    # 允许 20cm 的误差 (毕设常用值)
+  yaw_goal_tolerance: 0.2   # 允许一定的角度误差
+  latch_xy_goal_tolerance: true
+
+  # 3. 仿真时间：让 DWA 看得更远一点
+  sim_time: 2.0       # 模拟 2 秒后的轨迹
+  sim_granularity: 0.05
+
+  # 4. 权重调优：让它更看重全局路径
+  path_distance_bias: 32.0  # 增大这个值，让它更死心塌地跟着 FDS 的线走
+  goal_distance_bias: 20.0
+  occdist_scale: 0.02       # 降低避障权重，防止它离墙近了就吓得不敢动

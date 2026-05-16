@@ -1,0 +1,7 @@
+<library path="lib/libfds_planner">
+  <class name="fds_planner/FDSPlanner" type="fds_planner::FDSPlanner" base_class_type="nav_core::BaseGlobalPlanner">
+    <description>
+      这是一个融合了方向搜索算法 (FDS) 的全局规划器插件。
+    </description>
+  </class>
+</library>

@@ -1,0 +1,29 @@
+<launch>
+ <!-- 1. 启动 Stage 仿真器并加载 S1 地图 -->
+  <param name="/use_sim_time" value="true" />
+  <node pkg="stage_ros" type="stageros" name="stageros" args="$(find fds_planner)/world/s1_mixed.world">
+  <param name="base_watchdog_timeout" value="0.2"/>
+  </node>
+
+  <!-- 2. 启动 Map Server 提供全局地图 -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find fds_planner)/maps/s1_mixed.yaml" />
+
+    <!-- 3. 发送一个静态的 map 到 odom 坐标变换 (为了简化AMCL定位，先用理想定位测试算法) -->
+  <node pkg="tf" type="static_transform_publisher" name="map_odom_broadcaster" args="0 0 0 0 0 0 map odom 100" />
+
+    <!-- 4. 核心：启动 move_base 并加载咱们的算法 -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <!-- 声明使用我们自己的全局和局部规划器插件 -->
+     <!-- <param name="base_global_planner" value="fds_planner/FDSPlanner" />
+     <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" /> -->
+     <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+
+     <rosparam file="$(find fds_planner)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+     <rosparam file="$(find fds_planner)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+     <rosparam file="$(find fds_planner)/config/local_costmap_params.yaml" command="load" />
+     <rosparam file="$(find fds_planner)/config/global_costmap_params.yaml" command="load" />
+  </node>
+
+    <!-- 5. 启动 Rviz 可视化界面 -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find fds_planner)/rviz/default2.rviz" />
+</launch>

@@ -1,0 +1,8 @@
+define robot position ( size [0.35 0.35 0.25] gui_nose 1 drive "diff" )
+define map model ( color "gray" boundary 1 gui_grid 1 laser_return 1 )
+define wall model ( color "blue" size [10 0.2 0.5] laser_return 1 )
+window ( size [700 700] center [5 0] scale 25 )
+map ( name "stage" bitmap "../maps/stage.pgm" size [25.6 25.6 0.5] pose [0 0 0 0] )
+wall ( name "w1" pose [5 1.5 0 0] )
+wall ( name "w2" pose [5 -1.5 0 0] )
+robot ( name "robot" pose [0 0 0 0] )

@@ -1,0 +1,7 @@
+robot_radius: 0.20  # 机器人身形半径
+obstacle_range: 3.0 # 激光雷达能看到障碍物的最大距离
+raytrace_range: 3.5 # 清除空闲区域的最大距离
+transform_tolerance: 0.5
+
+observation_sources: laser_scan_sensor
+laser_scan_sensor: {sensor_frame: base_laser_link, data_type: LaserScan, topic: /base_scan, marking: true, clearing: true}

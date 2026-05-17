@@ -1,0 +1,8 @@
+prefix=/home/striveboy/catkin_ws/devel
+
+Name: fds_planner
+Description: Description of fds_planner
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,16 @@
+<launch>
+    <!-- 使用仿真时间，这也是你论文 2.1.2 节提到的环境级优化措施 -->
+    <param name="/use_sim_time" value="true"/>
+
+    <!-- 启动 Stage 2D仿真器并加载我们做好的 S1 场景 -->
+    <node pkg="stage_ros" type="stageros" name="stageros" args="$(find fds_planner)/world/s1_mixed.world">
+        <!-- 默认发布的雷达话题叫 base_scan，我们把它重映射成 scan，方便后面算法使用 -->
+        <remap from="base_scan" to="scan"/>
+    </node>
+    
+    <!-- 加载地图服务器，提供栅格地图数据 -->
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find fds_planner)/maps/s1_mixed.yaml" />
+
+    <!-- 启动一个 TF 变换，告诉 ROS 雷达安装在小车最中心 -->
+    <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser" args="0 0 0 0 0 0 /base_link /base_laser_link 100" />
+</launch>

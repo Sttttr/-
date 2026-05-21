@@ -1,0 +1,11 @@
+footprint: [[-0.25, -0.25], [-0.25, 0.25], [0.25, 0.25], [0.25, -0.25]]
+obstacle_range: 3.0
+raytrace_range: 3.5
+transform_tolerance: 0.5
+
+# 全局有效膨胀层参数（非扁平化或扁平化写法）
+inflation_radius: 0.55
+cost_scaling_factor: 5.0
+
+observation_sources: laser_scan_sensor
+laser_scan_sensor: {data_type: LaserScan, topic: /base_scan, marking: true, clearing: true}

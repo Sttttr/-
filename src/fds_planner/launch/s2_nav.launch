@@ -1,0 +1,31 @@
+<launch>
+  <!-- 1. 启动 Stage 仿真器并加载 S2 长走廊地图 -->
+  <param name="/use_sim_time" value="true" />
+  <node pkg="stage_ros" type="stageros" name="stageros" args="$(find fds_planner)/world/s2_corridor.world">
+    <param name="base_watchdog_timeout" value="0.2"/>
+  </node>
+
+  <!-- 2. 启动 Map Server 提供全局地图 -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find fds_planner)/maps/s2_corridor.yaml" />
+
+  <!-- 3. 发送一个静态的 map 到 odom 坐标变换 -->
+  <node pkg="tf" type="static_transform_publisher" name="map_odom_broadcaster" args="0 0 0 0 0 0 map odom 100" />
+
+  <!-- 4. 核心：启动 move_base 并加载我们的算法 -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+     <param name="base_global_planner" value="fds_planner/FDSPlanner" />
+     <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+
+     <!-- 控制器频率 -->
+     <param name="controller_frequency" value="10.0" />
+     
+     <rosparam file="$(find fds_planner)/config/base_local_planner_params.yaml" command="load" />
+     <rosparam file="$(find fds_planner)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+     <rosparam file="$(find fds_planner)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+     <rosparam file="$(find fds_planner)/config/local_costmap_params.yaml" command="load" />
+     <rosparam file="$(find fds_planner)/config/global_costmap_params.yaml" command="load" />
+  </node>
+
+  <!-- 5. 启动 Rviz 可视化界面 -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find fds_planner)/rviz/default2.rviz" />
+</launch>

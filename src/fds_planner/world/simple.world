@@ -1,0 +1,9 @@
+define robot position (
+  size [0.35 0.35 0.25]
+  gui_nose 1
+  drive "diff"
+)
+define map model ( color "black" boundary 1 gui_noshow 0 gui_grid 1 laser_return 1 )
+window ( size [600 600] center [0 0] rotate [0 0] scale 20 )
+map ( name "simple" bitmap "../maps/simple.pgm" size [25.6 25.6 0.5] pose [0 0 0 0] )
+robot ( name "robot" pose [0 0 0 0] )

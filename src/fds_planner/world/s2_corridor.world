@@ -1,0 +1,21 @@
+include "my_robot.inc"
+
+resolution 0.05
+interval_sim 10
+
+window (
+  size [ 800 600 ]
+  scale 30.0
+)
+
+floorplan (
+  name "s2_map"
+  bitmap "../maps/s2_corridor.pgm"
+  size [25.000 18.000 0.500]
+  pose [12.500 9.000 0.000 0.000]
+)
+
+my_robot (
+  pose [2.000 2.000 0.000 0.000]
+  color "red"
+)

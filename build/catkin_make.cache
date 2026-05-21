@@ -1,0 +1,2 @@
+dwa_local_planner:fds_planner
+-DCATKIN_DEVEL_PREFIX=/home/striveboy/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/striveboy/catkin_ws/install -G Unix Makefiles
